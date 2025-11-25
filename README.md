@@ -1,4 +1,4 @@
-# Local Live Gigs Web Application
+# Gig Buddy: Local Live Gigs Web Application
 
 A full-stack web application for sharing and managing collections of local live music gigs.
 
