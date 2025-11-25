@@ -1,5 +1,5 @@
 {
-  "name": "local-live-gigs-app",
+  "name": "gig-buddy-app",
   "version": "1.0.0",
   "description": "Web app for sharing and managing collections of local live gigs",
   "main": "index.js",

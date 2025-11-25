@@ -1,7 +1,7 @@
 {
-  "name": "local-live-gigs-api",
+  "name": "gig-buddy-api",
   "version": "1.0.0",
-  "description": "API server for Local Live Gigs web application",
+  "description": "API server for Gig Buddy web application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,24 +10,30 @@
     "test": "jest"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "helmet": "^6.0.1",
-    "dotenv": "^16.0.3",
-    "pg": "^8.9.0",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
     "express-validator": "^6.14.2",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
+    "pg": "^8.16.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20",
     "jest": "^29.4.1",
+    "nodemon": "^2.0.20",
     "supertest": "^6.3.3"
   },
-  "keywords": ["gigs", "music", "api", "node", "express"],
+  "keywords": [
+    "gigs",
+    "music",
+    "api",
+    "node",
+    "express"
+  ],
   "author": "Local Live Gigs Team",
   "license": "MIT"
 }

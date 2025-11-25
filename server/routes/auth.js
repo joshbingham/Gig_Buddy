@@ -52,6 +52,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
+const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -105,97 +106,221 @@ const loginValidation = [
 
 // POST /api/auth/register - Register new user
 router.post('/register', authLimiter, registerValidation, async (req, res) => {
-  // TODO: Implementation steps:
-  // 1. Check validation results
-  // 2. Check if user already exists (SELECT by email)
-  // 3. Hash password using bcrypt (12 salt rounds)
-  // 4. Insert new user into database
-  // 5. Generate JWT token
-  // 6. Return success response with user data (exclude password)
-  
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
+  try {
+    // Check validation results
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      });
+    }
+
+    const { name, email, password, bio } = req.body;
+
+    // Import database config
+    const { executeQuery } = require('../config/database');
+
+    // Check if user already exists
+    const existingUser = await executeQuery(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({
+        success: false,
+        error: 'User already exists',
+        message: 'An account with this email address already exists'
+      });
+    }
+
+    // Hash password using bcrypt (12 salt rounds)
+    const saltRounds = 12;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    // Insert new user into database
+    const result = await executeQuery(
+      `INSERT INTO users (name, email, password_hash, bio) 
+       VALUES ($1, $2, $3, $4) 
+       RETURNING id, name, email, bio, role, created_at`,
+      [name, email, passwordHash, bio || null]
+    );
+
+    const user = result.rows[0];
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role 
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Return success response with user data (exclude password)
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      data: {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          bio: user.bio,
+          role: user.role,
+          created_at: user.created_at
+        },
+        token
+      }
+    });
+
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({
       success: false,
-      error: 'Validation failed',
-      details: errors.array()
+      error: 'Registration failed',
+      message: 'An error occurred during registration'
     });
   }
-
-  // PLACEHOLDER - Add actual implementation
 });
 
 // POST /api/auth/login - User login
 router.post('/login', loginLimiter, loginValidation, async (req, res) => {
-  // TODO: Implementation steps:
-  // 1. Check validation results
-  // 2. Find user by email (SELECT)
-  // 3. Compare password with stored hash
-  // 4. If valid, generate JWT token
-  // 5. Return success response with token and user info
-  
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
+  try {
+    // Check validation results
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      });
+    }
+
+    const { email, password } = req.body;
+
+    // Import database config
+    const { executeQuery } = require('../config/database');
+
+    // Find user by email
+    const result = await executeQuery(
+      'SELECT id, name, email, password_hash, bio, role, created_at FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid credentials',
+        message: 'Email or password is incorrect'
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Compare password with stored hash
+    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid credentials',
+        message: 'Email or password is incorrect'
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role 
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Return success response with token and user info (exclude password)
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          bio: user.bio,
+          role: user.role,
+          created_at: user.created_at
+        },
+        token
+      }
+    });
+
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({
       success: false,
-      error: 'Validation failed',
-      details: errors.array()
+      error: 'Login failed',
+      message: 'An error occurred during login'
     });
   }
-
-  // PLACEHOLDER - Add actual implementation
 });
 
 // GET /api/auth/me - Get current user info
 router.get('/me', authenticateToken, async (req, res) => {
-  // TODO: Implementation steps:
-  // 1. Get user ID from JWT token (req.user.id)
-  // 2. Fetch user data from database (SELECT, exclude password)
-  // 3. Return user information
-  
-  // PLACEHOLDER - Add actual implementation
+  try {
+    // Get user ID from JWT token (req.user.id)
+    const userId = req.user.id;
+
+    // Import database config
+    const { executeQuery } = require('../config/database');
+
+    // Fetch user data from database (SELECT, exclude password)
+    const result = await executeQuery(
+      'SELECT id, name, email, bio, avatar_url, location, website_url, social_links, role, created_at, updated_at FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found',
+        message: 'The authenticated user could not be found'
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Return user information
+    res.status(200).json({
+      success: true,
+      data: { user }
+    });
+
+  } catch (error) {
+    console.error('Get current user error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch user data',
+      message: 'An error occurred while fetching user information'
+    });
+  }
 });
 
 // POST /api/auth/logout - User logout
-router.post('/logout', (req, res) => {
-  // TODO: Implementation steps:
-  // 1. For JWT tokens, logout is typically handled client-side
-  // 2. Clear any stored tokens if using refresh tokens
-  // 3. Return success message
+router.post('/logout', authenticateToken, (req, res) => {
+  // For JWT tokens, logout is typically handled client-side
+  // The token will expire naturally, but we can blacklist it if needed
   
   res.status(200).json({
     success: true,
     message: 'Logged out successfully'
   });
 });
-
-// Middleware to authenticate JWT tokens
-// TODO: Implement JWT token authentication middleware
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      error: 'Access token required'
-    });
-  }
-
-  // TODO: Verify token and set req.user
-  // jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-  //   if (err) {
-  //     return res.status(403).json({
-  //       success: false,
-  //       error: 'Invalid or expired token'
-  //     });
-  //   }
-  //   req.user = user;
-  //   next();
-  // });
-
-  // PLACEHOLDER
-  next();
-}
 
 module.exports = router;
