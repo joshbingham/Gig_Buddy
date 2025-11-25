@@ -1,7 +1,7 @@
 /**
  * DATABASE MIGRATION SCRIPT
  * 
- * This script creates the initial database schema for the Local Live Gigs application.
+ * This script creates the initial database schema for the Gig Buddy application.
  * 
  * RUN INSTRUCTIONS:
  * 1. Ensure PostgreSQL is running

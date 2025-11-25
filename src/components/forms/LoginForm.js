@@ -154,7 +154,7 @@ function LoginForm() {
     <div className="login-form-container">
       {/* TODO: Add form structure */}
       {/* <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Log In to Local Live Gigs</h2>
+        <h2>Log In to Gig Buddy</h2>
         
         Email field - TODO: Add email input
         <div className="form-group">

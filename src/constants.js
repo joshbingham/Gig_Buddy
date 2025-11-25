@@ -2,7 +2,7 @@
  * APPLICATION CONSTANTS
  * 
  * This file contains all application constants, API configurations, 
- * and configuration values for the Local Live Gigs application.
+ * and configuration values for the Gig Buddy application.
  * 
  * IMPLEMENTATION SECTIONS:
  * 

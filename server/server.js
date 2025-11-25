@@ -1,7 +1,7 @@
 /**
- * BACKEND API SERVER - Local Live Gigs
+ * BACKEND API SERVER - Gig Buddy
  * 
- * This will be a Node.js/Express API server for the Local Live Gigs application.
+ * This will be a Node.js/Express API server for the Gig Buddy application.
  * 
  * SETUP INSTRUCTIONS:
  * 1. Run: npm init -y
