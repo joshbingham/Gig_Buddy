@@ -1,73 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    
-    <!-- TODO: Add favicon -->
-    <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> -->
-    
-    <!-- TODO: Add meta tags for SEO and social sharing -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Gig Buddy - Share and discover your favorite live music experiences"
-    />
-    
-    <!-- TODO: Add Apple touch icon -->
-    <!-- <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> -->
-    
-    <!-- TODO: Add manifest for PWA -->
-    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
-    
-    <!-- TODO: Update page title based on route -->
-    <title>Gig Buddy - Keep it Live and Local</title>
-    
-    <!-- TODO: Add Google Fonts or other font imports -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
-    
-    <!-- TODO: Add font-awesome or other icon libraries -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GigBuddy</title>
+    <link rel="stylesheet" href="index.css">
   </head>
-  
   <body>
-    <!-- TODO: Add noscript message for users with JavaScript disabled -->
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    
-    <!-- TODO: Add loading screen or splash screen -->
-    <!-- <div id="splash-screen">
-      <img src="%PUBLIC_URL%/logo192.png" alt="Gig Buddy Live and Local" />
-      <p>Loading...</p>
-    </div> -->
-    
-    <!-- Main React app mount point -->
-    <div id="root"></div>
-    
-    <!-- TODO: Add modal mount point for global modals -->
-    <!-- <div id="modal-root"></div> -->
-    
-    <!-- TODO: Add notification mount point for global notifications -->
-    <!-- <div id="notification-root"></div> -->
-    
-    <!-- TODO: Add offline indicator -->
-    <!-- <div id="offline-indicator" className="offline-indicator hidden">
-      <i className="fas fa-wifi"></i>
-      <span>You're offline</span>
-    </div> -->
-    
-    <!-- TODO: Add analytics scripts (Google Analytics, etc.) -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'GA_TRACKING_ID');
-    </script> -->
-    
-    <!-- TODO: Add error tracking (Sentry, etc.) -->
-    <!-- <script>
-      // Error tracking setup
-    </script> -->
+    <header class="header">
+      <nav class="nav">
+        <a href="" class="nav-link">Home</a>
+        <a href="" class="nav-link">Login</a>
+        <a href="" class="nav-link">About</a>
+      </nav>
+    </header>
+      <div class="hero">
+        <h2 class="hero-title">GigBuddy</h2>
+        <img src="images/music-logo.webp" alt="Banner Image" width="50" height="35">
+        <p class="hero-subtitle">"Bringing you closer to the music you love, one gig at a time."</p>
+      <div class="hero-content">
+        <img class="hero-image2" src="images/gigbuddy-logo2.png" alt="Banner Image">
+      <div class="input-section">
+        <input type="text" id="search-gig" class="text-input" placeholder="Search gigs...">
+      </div>
+        <img class="hero-image" src="images/gigbuddy-logo.avif" alt="Banner Image">
+      </div>
+    </div>
+    <div class="section-testimonial">
+      <h3 class="section-title">What People Think About GigBuddy</h3>
+      <div class="testimonial-flex">
+        <div class="testimonial-box"><h4>Ben</h4><p class="sub">Gig Addict</p><p>“I use GigBuddy all the time because I'm a total gig addict — I'm always checking what’s on next and I never miss a chance to see a band live.”</p></div>
+        <div class="testimonial-box"><h4>Josh</h4><p class="sub">Always Touring</p><p>“I’m constantly touring around the country, hopping from venue to venue and festival to festival, and GigBuddy helps me line up my next trip without missing a beat.”</p></div>
+        <div class="testimonial-box"><h4>Faolán</h4><p class="sub">Loves Music</p><p>“I love music and the whole social side of gigs, so I use GigBuddy to keep myself involved in every show I can, meeting people and soaking up the atmosphere.”</p></div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="footer-icons">
+        <img class="footer-icon" src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+        <img class="footer-icon" src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+        <img class="footer-icon" src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="X">
+      </div>
+        <p>© GigBuddy</p>
+    </footer>
   </body>
 </html>
