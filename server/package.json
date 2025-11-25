@@ -1,7 +1,7 @@
 {
-  "name": "local-live-gigs-api",
+  "name": "gig-buddy-api",
   "version": "1.0.0",
-  "description": "API server for Local Live Gigs web application",
+  "description": "API server for Gig Buddy web application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
