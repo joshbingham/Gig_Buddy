@@ -63,10 +63,6 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env.test
-.env.production
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -79,7 +75,6 @@ jspm_packages/
 
 # Gatsby files
 .cache/
-public
 
 # Storybook build outputs
 .out
@@ -161,3 +156,11 @@ docs/api/
 # Generated files
 generated/
 auto-generated/
+
+# User-specific VS Code settings
+.vscode/settings.json
+.vscode/launch.json
+
+# TODO: Remove this line when you have actual user uploads
+# If you plan to have user-uploaded files in the future, uncomment and customize:
+# public/uploads/
