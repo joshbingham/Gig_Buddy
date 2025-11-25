@@ -1,0 +1,152 @@
+body {
+  margin: 0;
+  font-family: Helvetica;
+  color: #333;
+}
+
+.header {
+  background: #c7c3c2;
+  background-image: linear-gradient(135deg, #ead6c6 20%, transparent 55%);
+  background-size: 21px 22px;
+  border-bottom: 4px solid #8d8787;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.nav {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 150px;
+  font-size: 24px;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 550;
+}
+
+.nav-link:hover {
+  color: #42aef6;
+}
+
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 60px 0px;
+  background-image: url("images/background.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+}
+
+.hero-title {
+  font-size: 45px;
+  margin-bottom: 10px;
+  margin-top: 0;
+  text-align: center;
+  color: #fffdfd;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #fdfdfd;
+}
+
+.hero-image {
+  width: 25%;
+  max-width: 600px;
+  height: 460px;
+}
+
+.hero-image2 {
+  width: 25%;
+  max-width: 600px;
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.hero-image {
+    width: 350px;
+    height: 491px;
+  }
+
+.hero-image2 {
+  width: 350px;
+  height: auto;
+}
+
+.input-section {
+  text-align: center
+}
+
+.text-input {
+  padding: 230px 20px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 5px;
+  border: 4px solid #8d8787;
+}
+
+.section-testimonial {
+  text-align: center;
+  font-size: 20px;
+  padding: 20px 10px;
+  background: #c7c3c2;
+  background-image: linear-gradient(135deg, #ead6c6 20%, transparent 55%);
+  background-size: 20px 20px;
+  border-top: 4px solid #8d8787;
+}
+
+.testimonial-flex {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.testimonial-box {
+  width: 280px;
+  margin-top: 25px;
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px #cccccc;
+  font-size: 16px;
+}
+
+.sub {
+  font-size: 14px;
+  color: #666;
+}
+
+.footer {
+  padding: 30px 10px;
+  background-image: linear-gradient(to top, #ead6c6 10%, transparent 60%);
+  border-top: 4px solid #8d8787;
+  text-align: center;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 65px;
+  margin-bottom: 15px;
+}
+
+.footer-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
