@@ -34,30 +34,25 @@
  */
 
 const { Pool } = require('pg');
-require('dotenv').config();
+
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Load .env from project root
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Database connection configuration
-// TODO: Configure these environment variables
 const dbConfig = {
-  // Option 1: Single DATABASE_URL
-  connectionString: process.env.DATABASE_URL,
-  
-  // Option 2: Individual connection parameters
+  connectionString: process.env.DATABASE_URL, // Optional: Supabase URL
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
   database: process.env.DB_NAME || 'local_live_gigs',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || '',
-  
-  // Connection pool settings
   max: process.env.DB_MAX_CONNECTIONS || 20,
   idleTimeoutMillis: process.env.DB_IDLE_TIMEOUT || 30000,
   connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT || 10000,
-  
-  // SSL configuration (for production)
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false
-  } : false
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 };
 
 // Create connection pool
@@ -69,10 +64,7 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-/**
- * Test database connection
- * @returns {Promise<boolean>} - True if connection successful
- */
+// Test database connection
 const testConnection = async () => {
   try {
     const client = await pool.connect();
@@ -86,12 +78,7 @@ const testConnection = async () => {
   }
 };
 
-/**
- * Execute a single query
- * @param {string} text - SQL query text
- * @param {Array} params - Query parameters
- * @returns {Promise<Object>} - Query result
- */
+// Execute a single query
 const executeQuery = async (text, params = []) => {
   const start = Date.now();
   try {
@@ -105,11 +92,7 @@ const executeQuery = async (text, params = []) => {
   }
 };
 
-/**
- * Execute a transaction
- * @param {Function} callback - Async function that performs transaction queries
- * @returns {Promise<any>} - Transaction result
- */
+// Execute a transaction
 const executeTransaction = async (callback) => {
   const client = await pool.connect();
   try {
@@ -125,17 +108,12 @@ const executeTransaction = async (callback) => {
   }
 };
 
-/**
- * Get a client from the pool for manual transaction handling
- * @returns {Promise<Object>} - Database client
- */
+// Get a client from the pool
 const getClient = async () => {
   return await pool.connect();
 };
 
-/**
- * Close the connection pool
- */
+// Close the pool
 const closePool = async () => {
   try {
     await pool.end();
@@ -145,7 +123,7 @@ const closePool = async () => {
   }
 };
 
-// Handle application shutdown
+// Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('Received SIGINT, closing database pool...');
   await closePool();
