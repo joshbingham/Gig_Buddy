@@ -1,6 +1,7 @@
 {
   "name": "gig-buddy-api",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "API server for Gig Buddy web application",
   "main": "server.js",
   "scripts": {
@@ -20,6 +21,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "pg": "^8.16.3",
+    "postgres": "^3.4.7",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
