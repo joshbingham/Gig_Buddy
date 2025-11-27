@@ -1,0 +1,162 @@
+# Gig Website – Full Project Summary & Project Setup Guide
+
+## What We Are Building
+
+A complete gig listings website with:
+
+* **Frontend (React/Vite)** – user interface.
+* **Backend (Express/Node)** – API and server logic.
+* **Database (PostgreSQL via Railway)** – stores gigs, users, collections.
+* **Team of 3 collaborators** using a shared GitHub repository.
+
+This summary includes:
+
+* Recommended tools
+* Project setup workflow from start to finish
+* How environment variables work
+* Team collaboration practices
+* Architecture overview
+* Step-by-step process for actual website build including database creation and connections
+
+---
+
+## Recommended Tools
+
+1. **Frontend:** React or Vite + React
+2. **Backend:** Express (Node.js)
+3. **Database:** PostgreSQL on Railway
+4. **GitHub Repository:** For source control
+5. **GitHub Secrets:** For production environment variables
+6. **Swagger:** API documentation
+7. **Postman:** Endpoint testing
+8. **Figma:** Component design and UI planning
+9. **Redux Toolkit / React Query:** State management
+10. **Prettier + ESLint:** Code formatting and linting
+11. **GitHub Projects:** Kanban task board
+12. **Database Diagram (dbdiagram.io):** Visualizing table structure
+13. **Mock API / Dummy Data:** Optional for frontend testing before backend is ready
+
+---
+
+## Understanding Environment Variables and GitHub Secrets
+
+* Local `.env` files are **never automatically shared** or pulled by GitHub.
+* GitHub Secrets **do not overwrite or connect** to local `.env` files.
+* Secrets exist **only for GitHub Actions** during CI/CD workflows.
+* Team members must share development `.env` values manually (chat, vault, etc.).
+* GitHub Actions temporarily injects secrets as environment variables during workflows and then discards them.
+
+---
+
+## Architecture Overview (Story Version)
+
+1. **User visits website (frontend)** – React app served by Railway
+2. **Frontend calls backend** – e.g., GET /api/gigs
+3. **Backend talks to database** – Express queries PostgreSQL
+4. **Database stores gig data** – backend reads/writes gigs, collections, users
+5. **Data flows back to frontend** – users see live gig listings
+
+---
+
+## Step-by-Step Project Build & Setup
+
+### **Step 1: Create GitHub Repository**
+
+* Initialize shared repository
+* Set branch strategy (main + feature branches)
+* Add `.gitignore` (including `.env`)
+
+### **Step 2: Set Up Railway Account & Project**
+
+* Sign up or log in to Railway
+* Create a new project
+* Add PostgreSQL plugin for database
+* Note down `DATABASE_URL`
+
+### **Step 3: Database Design & Creation**
+
+1. Plan tables using dbdiagram.io:
+
+   * Users (id, name, email, password)
+   * Gigs (id, title, date, location, description)
+   * Collections (id, user_id, name)
+   * CollectionGigs (id, collection_id, gig_id)
+2. Create tables in PostgreSQL on Railway
+3. Test queries to ensure database works
+
+### **Step 4: Backend Setup**
+
+1. Initialize Express project (`npm init`, install dependencies)
+2. Connect to PostgreSQL using `DATABASE_URL`
+3. Create models corresponding to database tables
+4. Add API routes:
+
+   * GET /api/gigs
+   * POST /api/gigs
+   * POST /api/collections
+   * POST /api/collections/:id/gigs
+   * POST /auth/login
+   * POST /auth/register
+5. Add environment variables (`.env`) for JWT secrets, DB URL, etc.
+6. Test backend locally with Postman
+
+### **Step 5: Frontend Setup**
+
+1. Initialize React project (`create-react-app` or Vite)
+2. Configure `.env` for API URLs
+3. Design UI in Figma
+4. Implement components: GigCard, GigList, CollectionList, Login/Register forms, Nav, etc.
+5. Implement state management (Redux Toolkit / React Query)
+6. Connect to backend API
+7. Use mock data if backend is not fully ready
+
+### **Step 6: Integrate Frontend & Backend**
+
+* Update frontend API URLs to point to Railway backend
+* Test all API calls
+* Ensure data is saved to and retrieved from database correctly
+
+### **Step 7: Testing & Documentation**
+
+* Use Postman to test endpoints
+* Document API with Swagger
+* Ensure database queries return expected results
+* Add mock data to test UI
+
+### **Step 8: Deployment on Railway**
+
+1. Backend service: Connect repo, set env variables, deploy Node server
+2. Frontend service: Connect repo, build static site, deploy
+3. Confirm both frontend and backend URLs are live
+
+### **Step 9: Team Workflow & Collaboration**
+
+* Each member maintains local `.env` for development
+* Use GitHub Secrets for production variables only
+* Track tasks via GitHub Projects Kanban board
+* Commit, push, review, and merge feature branches
+
+### **Step 10: Final Testing & Launch**
+
+* Verify frontend, backend, and database integration
+* Check live site functionality
+* Monitor logs and fix any runtime issues
+* Confirm production deployment via Railway
+
+---
+
+## Summary: Essential Setup Checklist
+
+* GitHub repository with branching strategy
+* Backend (Express) connected to PostgreSQL (Railway)
+* Frontend (React) connected to backend API
+* Database tables created and working
+* Local `.env` files for development
+* GitHub Secrets for production deployment
+* Swagger / Postman for API documentation and testing
+* Figma for UI design and component planning
+* Redux Toolkit / React Query for state management
+* Prettier + ESLint for code formatting
+* GitHub Projects board for task tracking
+* Database diagram (dbdiagram.io)
+* Optional: Mock API / dummy data
