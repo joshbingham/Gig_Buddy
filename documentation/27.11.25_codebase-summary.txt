@@ -1,0 +1,330 @@
+Root Directory Files
+package.json - Frontend Dependencies
+React 18 as the main frontend framework
+Redux Toolkit for state management
+React Router for client-side routing
+Axios for HTTP requests
+react-scripts for build tooling
+Standard Create React App structure
+.gitignore - Git Exclusions
+Comprehensive .gitignore covering:
+
+Node modules and dependencies
+Build outputs (/build, /dist)
+Environment files (.env, .env.*)
+Logs and debugging files
+Backend-specific files (uploads/, logs/, *.db)
+Editor files (.vscode/, .idea/)
+Platform-specific files (.DS_Store, Thumbs.db)
+README.md - Project Documentation
+Describes the full-stack architecture:
+
+Frontend: React 18 + Redux + React Router + Axios
+Backend: Node.js + Express + PostgreSQL + JWT + bcryptjs
+Complete project structure explanation
+Technology stack breakdown
+extract-service-account.md - Firebase Setup Guide
+Configuration instructions for Firebase service accounts:
+
+Environment variable extraction from JSON
+Required fields: PROJECT_ID, PRIVATE_KEY, CLIENT_EMAIL, etc.
+Security warnings about keeping keys safe
+firebase-setup-guide.md - Firebase Integration Guide
+Complete Firebase setup documentation:
+
+Service account credential extraction
+Environment variable configuration
+Console links for Firebase services
+Security best practices
+Public Directory - Static Assets
+index.html - HTML Template
+Main HTML structure with:
+
+Semantic HTML5 structure
+Navigation header (Home, Login, About)
+Hero section with app branding
+Search input for gigs
+Testimonials section from users (Ben, Josh, Faolán)
+Social media footer links
+index.css - Landing Page Styling
+Comprehensive CSS for:
+
+Header navigation with gradient background
+Hero section with background image
+Testimonial cards with hover effects
+Footer with social icons
+Responsive design considerations
+Color scheme: gray (#c7c3c2), dark gray (#8d8787), blue accents
+images/ - Visual Assets
+Multiple logo formats (AVIF, PNG, WebP) and background images for the landing page.
+
+Source Directory - React Frontend
+index.js - React Entry Point
+Main application bootstrap with:
+
+Redux Provider setup
+BrowserRouter configuration
+Store integration
+Global CSS imports
+Service worker registration (for PWA)
+StrictMode for development
+TODO comments for enhancement features (Redux Persist, Theme Provider, etc.)
+App.js - Main Application Component
+Root component with comprehensive TODO structure for:
+
+Complete routing configuration (public and protected routes)
+Header/Footer components
+Loading states and error boundaries
+Authentication state management
+UI state (notifications, modals, theme)
+Navigation with authentication awareness
+Protected route wrappers
+404 handling
+index.css - Global Styles
+Extensive CSS foundation with TODO sections for:
+
+CSS custom properties (variables)
+Typography scales and base styles
+Form elements styling
+Button components
+Utility classes
+Animation and transitions
+Responsive breakpoints
+Theme variants (light/dark mode)
+App.css - Component Styles
+Component-specific styling placeholders for:
+
+App container layout
+Header navigation
+Page layouts and grids
+Card components
+Loading spinners
+Modal dialogs
+Notification system
+Error states
+Responsive design
+constants.js - Application Configuration
+Centralized constants with TODO sections for:
+
+API base URL and endpoints
+Route definitions
+Form validation rules
+Genre and venue type options
+User roles and statuses
+Pagination defaults
+File upload limits
+Theme configuration
+Error and success messages
+Social media links
+Date formatting
+firebase.js - Firebase Client Configuration
+Basic Firebase initialization:
+
+Environment variable configuration
+Firestore integration
+Clean, minimal setup
+firebase-backup.js - Extended Firebase Setup
+Enhanced Firebase configuration:
+
+Authentication service
+Firestore database
+Cloud Storage
+More comprehensive service initialization
+store/store.js - Redux Store Configuration
+Redux store setup with:
+
+Redux Toolkit + Redux Persist
+Middleware configuration
+Multiple reducers structure (auth, gigs, collections, users, ui)
+Development tools setup
+Placeholder reducers with proper state shapes
+TODO comments for action creators and selectors
+components/forms/LoginForm.js - Authentication Component
+Complete login form structure with:
+
+Form validation patterns
+Controlled component pattern
+Redux integration hooks
+Error handling and loading states
+Accessibility features (ARIA labels, screen reader support)
+Social login placeholders
+Remember me functionality
+Registration and forgot password links
+Placeholder content showing planned features
+Server Directory - Node.js Backend
+package.json - Backend Dependencies
+Node.js API server with:
+
+Express.js web framework
+PostgreSQL database driver
+JWT for authentication
+bcryptjs for password hashing
+Firebase Admin SDK for Firebase integration
+CORS, Helmet, Morgan for security and logging
+Express Validator for input validation
+Express Rate Limit for API protection
+server.js - Express Server
+Main API server with:
+
+Security middleware (Helmet, CORS, Rate Limiting)
+Request logging with Morgan
+Body parsing middleware
+Route configuration (/api/auth, /api/gigs, /api/collections, /api/users)
+Global error handling
+Database connection testing on startup
+Health check endpoint (/health)
+Graceful shutdown handling
+Environment-specific configurations
+firebase-admin.js - Firebase Admin SDK
+Server-side Firebase configuration:
+
+Service account setup from environment variables
+Admin SDK initialization
+Firestore integration
+Proper credential handling with escaped newlines
+Server Configuration
+config/database.js - PostgreSQL Configuration
+PostgreSQL connection with:
+
+Connection pooling setup
+Environment variable configuration
+Database testing functions
+Query execution helpers
+Transaction handling
+Graceful shutdown handling
+SSL configuration for production
+config/database-firebase.js - Firebase Firestore Configuration
+Comprehensive Firebase integration:
+
+Service account setup
+Firestore operations (CRUD, batch, real-time listeners)
+Document and collection management
+Query building with conditions and pagination
+Real-time listener setup
+Connection testing
+config/supabase.js - Supabase Integration
+Simple PostgreSQL connection for Supabase:
+
+Direct postgres library usage
+Environment-based connection string
+config/test-db.js - Database Testing
+Database connection testing utility:
+
+Environment variable loading
+Connection testing function
+Error handling for database issues
+Server Middleware
+middleware/auth.js - JWT Authentication
+Comprehensive authentication middleware:
+
+JWT token verification
+Bearer token handling
+Token expiration management
+User role checking (admin)
+Ownership verification for resources
+Optional authentication for public endpoints
+Detailed error handling for different token issues
+Server Routes - API Endpoints
+routes/auth.js - Authentication Endpoints
+Complete authentication system:
+
+POST /register - User registration with validation, password hashing (bcrypt), JWT generation
+POST /login - User login with credential validation and token generation
+GET /me - Get current user info (protected)
+POST /logout - Token blacklisting placeholder
+Rate limiting for sensitive endpoints
+Password strength requirements
+Email validation and uniqueness checking
+Comprehensive error handling
+routes/gigs.js - Gig Management
+Gig CRUD operations with TODO implementations:
+
+GET / - Public gig browsing with pagination and filtering
+GET /:id - Individual gig details
+GET /my - User's personal gigs (protected)
+POST / - Create new gig (protected)
+PUT /:id - Update gig (protected, ownership check)
+DELETE /:id - Delete gig (protected, ownership check)
+Genre validation against predefined list
+Date validation (no past dates)
+Price validation
+Comprehensive input validation
+routes/collections.js - Collection Management
+Collection CRUD with sharing features:
+
+GET / - Public collection browsing
+GET /my - User's collections (protected)
+GET /:id - Collection details with gig listings
+POST / - Create collection (protected)
+PUT /:id - Update collection (protected, ownership check)
+DELETE /:id - Delete collection (protected, ownership check)
+POST /:id/gigs/:gigId - Add gig to collection
+DELETE /:id/gigs/:gigId - Remove gig from collection
+Public/private collection support
+Many-to-many relationship handling
+routes/users.js - User Management
+User profile and data endpoints:
+
+GET / - Public user listing with search and filtering
+GET /:id - User profile details (public)
+GET /:id/gigs - User's public gigs
+GET /:id/collections - User's public collections
+PUT /:id - Update profile (protected, ownership check)
+POST /:id/avatar - Avatar upload (protected, ownership check)
+GET /:id/stats - User statistics (gigs count, collections count)
+Public/private data separation
+User statistics calculation
+Server Scripts
+scripts/migrate.js - Database Setup
+Complete database schema creation:
+
+users table - User profiles with authentication and social links
+gigs table - Event listings with venue, date, genre, pricing
+collections table - User collections with privacy settings
+collection_gigs junction table - Many-to-many relationships
+genres table - Predefined music genres
+Comprehensive indexing strategy
+Foreign key constraints with CASCADE deletes
+Sample data population for genres
+Migration execution functions
+Server Testing
+test-firebase-connection.js - Firebase Testing
+Firebase connection verification:
+
+Environment variable validation
+Connection testing
+Document creation test
+Query operation testing
+Error handling for connection issues
+test-postgres-connection.js - PostgreSQL Testing
+Database connection testing:
+
+Direct postgres library usage
+Connection string validation
+SSL configuration for production
+Basic query execution test
+test-firebase.js - Firebase Admin SDK Testing
+Admin SDK functionality testing:
+
+Service account configuration
+Firestore document operations
+Timestamp handling
+Connection verification
+Key Architecture Insights
+Full-Stack Separation: Clean separation between frontend (React) and backend (Node.js/Express) with API communication.
+
+Database Flexibility: Support for both PostgreSQL and Firebase/Firestore, with multiple configuration options.
+
+Authentication System: JWT-based authentication with bcrypt password hashing and role-based access control.
+
+API Design: RESTful API with proper HTTP status codes, error handling, and validation.
+
+State Management: Redux Toolkit for frontend state with Redux Persist for localStorage.
+
+Security Features: Rate limiting, input validation, SQL injection protection, XSS protection via Helmet.
+
+Development Structure: Comprehensive TODO comments throughout providing clear implementation guidance.
+
+Migration System: Complete database schema setup with proper indexing and relationships.
+
+
