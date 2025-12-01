@@ -1,5 +1,7 @@
 SWAGGER - WHY WE NEED IT
 
+faolan to update with notes on function and code
+
 What is an API?
 Imagine your backend server (the computer part of your app) is like a kitchen in a restaurant. It has "recipes" (code) to make things happen, like logging in a user or showing a list of gigs.
 
