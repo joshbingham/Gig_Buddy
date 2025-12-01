@@ -24,6 +24,7 @@
  // 2. SWAGGER CONFIGURATION SECTION
  // =============================================================================
  // Set up Swagger for API documentation
+
  // - Define swaggerOptions object
 
 
@@ -41,20 +42,42 @@
         description: 'Development server',
       },
     ],
+  components:{
+    securitySchemes{
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFromat:
+'JWT' 
+   },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ['./routes/*.js'],
 };
 
 /*
+
+=========================
 /function: configuration object that defines the base structure of your API doc using the OpenAPI 3.0 spec
 /why: provides essential metadata about the API, (title, version etc) and tells Swagger where to find detailed endpoint info
-/how: definition object sets up OpenAPI spec with API info and server details...
-/how: ... the apis array uses a glob pattern to scan your route files /routes/*.js for JSDoc comments describing individual endpoints
-/how: ... the [info] object displays info at top of Swagger UI to make it clear what the API is for
-/how: ... the [servers] array lists the environments where the API runs - so can test endpoints against diferent servers directly in the Swagger UI
-/how: ... each server has a [url] (dynamically set from env variables) and a [description] (set below to localhost)
-/how: ... this generates the complete OpenAPI specification JSON 
- // - Create swaggerDocs using swaggerjsdoc
+/how: - definition object sets up OpenAPI spec with API info and server details...
+/how: - the apis array uses a glob pattern to scan your route files /routes/*.js for JSDoc comments describing individual endpoints
+/how: - the [info] object displays info at top of Swagger UI to make it clear what the API is for
+/how: - the [servers] array lists the environments where the API runs - so can test endpoints against diferent servers directly in the Swagger UI
+/how: - each server has a [url] (dynamically set from env variables) and a [description] (set below to localhost)
+/how: - the [components] object defines reusable elements like security schemes for JWT authentication
+/why: - needed to specify how auth works (Bearer tokens) so Swagger UI can handle login/testing of protected endpoints
+/how: - [securitySchemes] defines 'bearerAuth' as HTTP Bearer with JWT format, enabling "Authorize" button in UI
+/how:- the [security] array applies bearerAuth globally, requiring tokens for all endpoints (overrideable per route)
+/how:- this generates the complete OpenAPI specification JSON 
+
+// swaggerDocs
 */ 
 const swaggerDocs = swaggerjsdoc(swaggerOptions);
 /*
@@ -72,6 +95,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 /why: provices web-based interface where devs and users can view AI documentation, see endpoint details, and test requests direcctly in browwser
 /how: [swaggerUi.serve] handles HTTP requests to the /api-docs path, serving static files for the UI.
 /how: ... [swaggerUI.setup(swaggerDocs)] initialises the UI with generated OpenAPI spec (swaggerDocs), rendering the docs with interactive elements, like 'try it out' buttons for each end point
+
 
  // =============================================================================
  // 3. EXPRESS APP INITIALIZATION SECTION

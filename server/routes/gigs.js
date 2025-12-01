@@ -45,7 +45,14 @@
  *    - Sort by date, title, or created_at
  */
 
-const express = require('express');
+// NOTE: Add Swagger JSDoc documentation above each router.method() call for API documentation.
+// Example: /** @swagger ... */ above router.get('/', ...)
+
+// =============================================================================
+// IMPORTS AND SETUP SECTION
+// =============================================================================
+
+ const express = require('express');
 const { body, query, validationResult } = require('express-validator');
 const { authenticateToken } = require('../middleware/auth');
 
@@ -96,6 +103,52 @@ const gigValidation = [
 ];
 
 // GET /api/gigs - Get all gigs (public) with pagination and filtering
+// IMPORTANT! this is supposed to stay commented - JSDoc comment for Swagger API documentation - the /** */ markers are required for JSDoc to parse and generate docs, do not remove them
+/**
+ * @swagger
+ * /api/gigs:
+ *   get:
+ *     summary: Get all gigs with optional filtering and pagination
+ *     tags: [Gigs]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *         description: Number of gigs per page
+ *       - in: query
+ *         name: genre
+ *         schema:
+ *           type: string
+ *         description: Filter by genre
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search in title or venue
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [date, title, created_at]
+ *         description: Sort order
+ *     responses:
+ *       200:
+ *         description: List of gigs with pagination metadata
+ *       400:
+ *         description: Invalid query parameters
+ */
+//function: documents the GET /api/gigs endpoint for Swagger UI
+//why: allows users to see and test the public gigs listing with filters
+//how: defines parameters for pagination/filtering and response schemas
 router.get('/', [
   // TODO: Add validation for query parameters
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
@@ -124,6 +177,30 @@ router.get('/', [
 });
 
 // GET /api/gigs/:id - Get specific gig details (public)
+/**
+ * @swagger
+ * /api/gigs/{id}:
+ *   get:
+ *     summary: Get details of a specific gig
+ *     tags: [Gigs]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Gig ID
+ *     responses:
+ *       200:
+ *         description: Gig details
+ *       400:
+ *         description: Invalid gig ID
+ *       404:
+ *         description: Gig not found
+ */
+//function: documents the GET /api/gigs/{id} endpoint for Swagger UI
+//why: allows users to view detailed information about a specific gig
+//how: defines path parameter for ID and possible response codes
 router.get('/:id', async (req, res) => {
   // TODO: Implementation steps:
   // 1. Validate ID parameter (must be positive integer)
