@@ -2,253 +2,192 @@
  * BACKEND API SERVER - Gig Buddy
  * 
  * This will be a Node.js/Express API server for the Gig Buddy application.
- * 
- * SETUP INSTRUCTIONS:
- * 1. Run: npm init -y
- * 2. Install dependencies: npm install express cors helmet dotenv pg bcryptjs jsonwebtoken express-rate-limit
- * 3. Install dev dependencies: npm install --save-dev nodemon
- * 4. Set up PostgreSQL database
- * 5. Create .env file with database connection and JWT secrets
- * 6. Run database migrations to create tables
- * 
- * DATABASE SCHEMA:
- * - Users table: id, name, email, password_hash, bio, role, created_at, updated_at
- * - Gigs table: id, title, description, venue, date, genre, price, image_url, user_id, created_at, updated_at
- * - Collections table: id, name, description, user_id, created_at, updated_at
- * - Collection_gigs table: collection_id, gig_id (many-to-many relationship)
- * - Genres table: id, name (for predefined music genres)
- * 
- * API ENDPOINTS TO IMPLEMENT:
- * Authentication:
- *   POST /api/auth/register - Register new user
- *   POST /api/auth/login - User login
- *   GET  /api/auth/me - Get current user info
- *   POST /api/auth/logout - User logout
- * 
- * Gigs (Public/Private):
- *   GET    /api/gigs - Get all gigs (public)
- *   GET    /api/gigs/:id - Get specific gig details
- *   GET    /api/gigs/my - Get user's own gigs (private)
- *   POST   /api/gigs - Create new gig (private)
- *   PUT    /api/gigs/:id - Update gig (private)
- *   DELETE /api/gigs/:id - Delete gig (private)
- * 
- * Collections:
- *   GET    /api/collections - Get all collections (public)
- *   GET    /api/collections/my - Get user's collections (private)
- *   GET    /api/collections/:id - Get specific collection
- *   POST   /api/collections - Create new collection (private)
- *   PUT    /api/collections/:id - Update collection (private)
- *   DELETE /api/collections/:id - Delete collection (private)
- *   POST   /api/collections/:id/gigs/:gigId - Add gig to collection
- *   DELETE /api/collections/:id/gigs/:gigId - Remove gig from collection
- * 
- * Users:
- *   GET /api/users - Get all users (public)
- *   GET /api/users/:id - Get user details (public)
- *   GET /api/users/:id/gigs - Get user's gigs (public)
- *   GET /api/users/:id/collections - Get user's collections (public)
- * 
- * SECURITY FEATURES TO IMPLEMENT:
- * - JWT token authentication
- * - Password hashing with bcrypt
- * - Input validation and sanitization
- * - Rate limiting
- * - CORS configuration
- * - Helmet for security headers
- * 
- * ERROR HANDLING:
- * - Consistent error response format
- * - Proper HTTP status codes
- * - Validation error messages
- * - Database error handling
- */
+ 
+ 
+ // =============================================================================
+ // 1. IMPORTS SECTION
+ // =============================================================================
+ // Add all necessary imports here (Express, middleware, database, routes.):
+ 
+  // import express from 'express';
+  
+  // import cors from 'cors';
+ 
+  // import swaggerjsdoc from 'swagger-jsdoc';
 
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+ */import swaggerjsdoc from 'swagger-jsdoc'
+   import swaggerUi from 'swagger-ui-express'/*
 
-// Import database configuration
-const { testConnection } = require('./config/database');
+   // import authRoutes from './routes/auth.js';
 
-// Import route handlers
-const authRoutes = require('./routes/auth');
-const gigsRoutes = require('./routes/gigs');
-const collectionsRoutes = require('./routes/collections');
-const usersRoutes = require('./routes/users');
+ // =============================================================================
+ // 2. SWAGGER CONFIGURATION SECTION
+ // =============================================================================
+ // Set up Swagger for API documentation
+ // - Define swaggerOptions object
 
-const app = express();
 
-// Security middleware
-app.use(helmet());
-
-// CORS configuration
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-// Request logging
-app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
-
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: {
-    success: false,
-    error: 'Too many requests from this IP, please try again later.'
+*/const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Gig Buddy API',
+      version: '1.0.0',
+      description: 'API documentation for the Gig Buddy application',
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 3000}`,
+        description: 'Development server',
+      },
+    ],
   },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use('/api', limiter);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Server is running',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
-
-// API routes
-app.use('/api/auth', authRoutes);
-app.use('/api/gigs', gigsRoutes);
-app.use('/api/collections', collectionsRoutes);
-app.use('/api/users', usersRoutes);
-
-// 404 handler for undefined API routes
-app.use('/api/*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    error: 'API endpoint not found',
-    message: `The requested endpoint ${req.method} ${req.originalUrl} does not exist`
-  });
-});
-
-// Global error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Global error handler:', err);
-
-  // Default error
-  let error = {
-    success: false,
-    error: 'Internal server error',
-    message: 'Something went wrong on our end'
-  };
-
-  // Handle specific error types
-  if (err.name === 'ValidationError') {
-    error = {
-      success: false,
-      error: 'Validation failed',
-      message: 'Request validation failed',
-      details: err.details || err.message
-    };
-    return res.status(400).json(error);
-  }
-
-  if (err.name === 'UnauthorizedError' || err.name === 'JsonWebTokenError') {
-    error = {
-      success: false,
-      error: 'Authentication failed',
-      message: 'Invalid or expired token'
-    };
-    return res.status(401).json(error);
-  }
-
-  if (err.code === '23505') { // PostgreSQL unique constraint violation
-    error = {
-      success: false,
-      error: 'Duplicate entry',
-      message: 'A record with this information already exists'
-    };
-    return res.status(409).json(error);
-  }
-
-  if (err.code === '23503') { // PostgreSQL foreign key violation
-    error = {
-      success: false,
-      error: 'Invalid reference',
-      message: 'Referenced record does not exist'
-    };
-    return res.status(400).json(error);
-  }
-
-  // Return appropriate status code
-  const statusCode = err.statusCode || err.status || 500;
-  res.status(statusCode).json(error);
-});
-
-// Server startup
-const PORT = process.env.PORT || 5000;
-
-const startServer = async () => {
-  try {
-    // Test database connection
-    console.log('Testing database connection...');
-    const dbConnected = await testConnection();
-    
-    if (!dbConnected) {
-      console.error('❌ Failed to connect to database');
-      process.exit(1);
-    }
-
-    // Start server
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📡 API Base URL: http://localhost:${PORT}/api`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
-      }
-    });
-
-  } catch (error) {
-    console.error('❌ Failed to start server:', error.message);
-    process.exit(1);
-  }
+  apis: ['./routes/*.js'],
 };
 
+/*
+/function: configuration object that defines the base structure of your API doc using the OpenAPI 3.0 spec
+/why: provides essential metadata about the API, (title, version etc) and tells Swagger where to find detailed endpoint info
+/how: definition object sets up OpenAPI spec with API info and server details...
+/how: ... the apis array uses a glob pattern to scan your route files /routes/*.js for JSDoc comments describing individual endpoints
+/how: ... the [info] object displays info at top of Swagger UI to make it clear what the API is for
+/how: ... the [servers] array lists the environments where the API runs - so can test endpoints against diferent servers directly in the Swagger UI
+/how: ... each server has a [url] (dynamically set from env variables) and a [description] (set below to localhost)
+/how: ... this generates the complete OpenAPI specification JSON 
+ // - Create swaggerDocs using swaggerjsdoc
+*/ 
+const swaggerDocs = swaggerjsdoc(swaggerOptions);
+/*
+/function: this converts the configuration and JSDoc comments into a machine-readable format Swagger UI can display
+/how: ... [swaggerjsdoc] function takes the [swaggerOptions] and scans specified [apis] files - extracting JSdoc annotations to build a full API spec
+/how: ... the result [swaggerDocs] is a JSON object ready to be served by the UI
+
+
+ // - Mount Swagger UI at /api-docs
+
+*/ 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+/*
+/function: mounts the swagger UI at /api-docs route
+/why: provices web-based interface where devs and users can view AI documentation, see endpoint details, and test requests direcctly in browwser
+/how: [swaggerUi.serve] handles HTTP requests to the /api-docs path, serving static files for the UI.
+/how: ... [swaggerUI.setup(swaggerDocs)] initialises the UI with generated OpenAPI spec (swaggerDocs), rendering the docs with interactive elements, like 'try it out' buttons for each end point
+
+ // =============================================================================
+ // 3. EXPRESS APP INITIALIZATION SECTION
+ // =============================================================================
+ // Create Express app instance
+ // - const app = express();
+ // - const PORT = process.env.PORT || 3000;
+
+ // =============================================================================
+ // 4. MIDDLEWARE SECTION
+ // =============================================================================
+ // Add middleware for security, parsing, etc.
+ // - app.use(helmet());
+ // - app.use(cors());
+ // - app.use(express.json());
+ // - app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+ // =============================================================================
+ // 5. API ENDPOINTS SECTION
+ // =============================================================================
+ // Mount API routes
+ // Suggested endpoints to implement:
+ //
+ // AUTHENTICATION:
+ // - POST /api/auth/register - Register new user
+ // - POST /api/auth/login - User login
+ // - GET  /api/auth/me - Get current user info (protected)
+ // - POST /api/auth/logout - User logout
+ //
+ // GIGS (Public/Private):
+ // - GET    /api/gigs - Get all gigs (public)
+ // - GET    /api/gigs/:id - Get specific gig details (public)
+ // - GET    /api/gigs/my - Get user's own gigs (private)
+ // - POST   /api/gigs - Create new gig (private)
+ // - PUT    /api/gigs/:id - Update gig (private)
+ // - DELETE /api/gigs/:id - Delete gig (private)
+ //
+ // COLLECTIONS:
+ // - GET    /api/collections - Get all collections (public)
+ // - GET    /api/collections/my - Get user's collections (private)
+ // - GET    /api/collections/:id - Get specific collection
+ // - POST   /api/collections - Create new collection (private)
+ // - PUT    /api/collections/:id - Update collection (private)
+ // - DELETE /api/collections/:id - Delete collection (private)
+ // - POST   /api/collections/:id/gigs/:gigId - Add gig to collection
+ // - DELETE /api/collections/:id/gigs/:gigId - Remove gig from collection
+ //
+ // USERS:
+ // - GET /api/users - Get all users (public)
+ // - GET /api/users/:id - Get user details (public)
+ // - GET /api/users/:id/gigs - Get user's gigs (public)
+ // - GET /api/users/:id/collections - Get user's collections (public)
+ //
+ // Example: app.use('/api/auth', authRoutes);
+
+ // =============================================================================
+ // 6. ERROR HANDLING SECTION
+ // =============================================================================
+ // Add global error handling middleware
+ // - Handle validation errors
+ // - Handle database errors
+ // - Return consistent error responses
+
+ // =============================================================================
+ // 7. SERVER STARTUP SECTION
+ // =============================================================================
+ // Start the server
+ // - Test database connection
+ // - app.listen(PORT, () => { ... });
+ // - Handle graceful shutdown
+ //
+
+
+// Import database configuration
+
+// Import route handlers
+
+// Security middleware
+
+// CORS configuration
+
+// Request logging
+
+// Body parsing middleware
+
+// Rate limiting
+
+// Health check endpoint
+
+// API routes
+
+// 404 handler for undefined API routes
+
+// Global error handling middleware
+
+  // Handle specific error types
+  
+
+   // PostgreSQL unique constraint violation
+  
+   // PostgreSQL foreign key violation
+   
+
+  // Return appropriate status code
+ 
+// Server startup
+
+    // Test database connection
+   
+    // Start server
+    
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err.message);
-  console.error('Shutting down server due to Unhandled Promise rejection');
-  process.exit(1);
-});
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err.message);
-  console.error('Shutting down server due to Uncaught Exception');
-  process.exit(1);
-});
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('👋 SIGTERM received. Shutting down gracefully');
-  process.exit(0);
-});
 
-process.on('SIGINT', () => {
-  console.log('👋 SIGINT received. Shutting down gracefully');
-  process.exit(0);
-});
 
 // Start the server
-startServer();
-
-module.exports = app;
