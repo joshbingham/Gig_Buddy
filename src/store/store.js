@@ -68,6 +68,14 @@ const persistConfig = {
   blacklist: ['gigs', 'collections', 'users'] // Don't persist data that can be refetched
 };
 
+// Placeholder reducers (to be replaced with actual implementations)
+// TODO: Remove these and create proper reducers
+const authReducer = (state = { user: null, token: null, isAuthenticated: false, isLoading: false, error: null }) => state;
+const gigsReducer = (state = { list: [], currentGig: null, filters: {}, pagination: {}, isLoading: false, error: null }) => state;
+const collectionsReducer = (state = { list: [], currentCollection: null, filters: {}, pagination: {}, isLoading: false, error: null }) => state;
+const usersReducer = (state = { currentUser: null, publicUsers: [], isLoading: false, error: null }) => state;
+const uiReducer = (state = { notifications: [], modals: [], theme: 'light', sidebarOpen: false }) => state;
+
 // Root reducer - combine all reducers
 const rootReducer = combineReducers({
   // TODO: Add all reducers
@@ -104,8 +112,8 @@ const store = configureStore({
 // Create persistor
 export const persistor = persistStore(store);
 
-// Export store and persistor
-export { store, persistor };
+// Export store
+export { store };
 
 // Export types for use in components (use in TypeScript files)
 // export type RootState = ReturnType<typeof store.getState>;
@@ -119,10 +127,3 @@ export { store, persistor };
 // export const selectUsers = (state) => state.users;
 // export const selectUI = (state) => state.ui;
 
-// Placeholder reducers (to be replaced with actual implementations)
-// TODO: Remove these and create proper reducers
-const authReducer = (state = { user: null, token: null, isAuthenticated: false, isLoading: false, error: null }) => state;
-const gigsReducer = (state = { list: [], currentGig: null, filters: {}, pagination: {}, isLoading: false, error: null }) => state;
-const collectionsReducer = (state = { list: [], currentCollection: null, filters: {}, pagination: {}, isLoading: false, error: null }) => state;
-const usersReducer = (state = { currentUser: null, publicUsers: [], isLoading: false, error: null }) => state;
-const uiReducer = (state = { notifications: [], modals: [], theme: 'light', sidebarOpen: false }) => state;
