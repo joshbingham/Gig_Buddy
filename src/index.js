@@ -53,7 +53,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store/store';
 import App from './App';
-import './styles/global.css';
+import './index.css'; // Global CSS styles
 
 // TODO: Add additional imports for enhanced functionality:
 // import { PersistGate } from 'redux-persist/integration/react';
