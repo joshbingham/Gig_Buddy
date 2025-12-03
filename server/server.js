@@ -41,14 +41,13 @@ const swaggerOptions = {
         description: 'Development server',
       },
     ],
-  components:{
-    securitySchemes{
-    bearerAuth: {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFromat:
-'JWT' 
-   },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
     },
     security: [
@@ -82,7 +81,7 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //Health check endpoint
-app.get('/', (req, res) => red.send('Gig Buddy API is running'));
+app.get('/', (req, res) => res.send('Gig Buddy API is running'));
 
 //Start the server
 app.listen(PORT, () => {
